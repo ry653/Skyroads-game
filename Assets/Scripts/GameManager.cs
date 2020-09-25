@@ -13,10 +13,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text bestPointText;
     [SerializeField] private Text coinsText;
     [SerializeField] private SmoothFollow camera;
+    [SerializeField] private PauseController pauseController;
+    [SerializeField] private MainMenu mainMenu;
     private int point;
     public int bestPoint;
     public int coins;
     private bool boostEnable;
+    public bool isSound ;
 
     public bool canPlay;
     public void ShowResult()
@@ -32,21 +35,22 @@ public class GameManager : MonoBehaviour
         StopAllCoroutines();
         SaveManager.Instance.SaveGame();
     }
+    public void MainBtn()
+    {
+        mainMenu.OpenMenu();
+    }
     private void Start()
     {
-        StartCoroutine(Point());
-        StartCoroutine(Spead());
+        AllStartCoroutine();
     }
-    public void SatartGame()
+    public void StartGame()
     {
         Debug.Log("clik");
         congratulations.SetActive(false);
         resultObj.SetActive(false);
-        camera.height = 5f;
         roadSpawner.StartGame();
         canPlay = true;
-        StartCoroutine(Point());
-        StartCoroutine(Spead());
+        AllStartCoroutine();
         point = 0;
     }
     public void AdCoins(int c)
@@ -92,8 +96,17 @@ public class GameManager : MonoBehaviour
         if (canPlay)
         {
             CheckInput();
-
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                pauseController.Pause();
+            }
         }
+    }
+    public void AllStartCoroutine()
+    {
+        StartCoroutine(Point());
+        StartCoroutine(Spead());
+        camera.height = 5f;
     }
 
     private void CheckInput()

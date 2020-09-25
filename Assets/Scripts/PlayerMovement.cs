@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float boostSpeed = 5;
     [SerializeField] private GameManager gameManager;
+    Rigidbody rb;
 
     private int laneNumber = 1,
                 lanesCount = 2;
@@ -13,10 +14,12 @@ public class PlayerMovement : MonoBehaviour
                  laneDistance,
                  SideSpeed;
     private Vector3 startPosition;
+    private Vector3 rbVelocity;
 
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
         transform.position = new Vector3(2.6f, 0.7f, 0);
         startPosition = transform.position;
         Debug.Log(transform.position);
@@ -55,6 +58,14 @@ public class PlayerMovement : MonoBehaviour
                 laneNumber = 1;
         }
     }
+    public void Pause()
+    {
+        rbVelocity = rb.velocity;
+    }
+    public void UnPause()
+    {
+        rb.velocity = rbVelocity;
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("comet"))
@@ -66,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.gameObject.CompareTag("coins"))
         {
+            AudioManager.Instance.PlayCoinEffect();
             System.Console.WriteLine("+1");
             gameManager.AdCoins(1);
             Destroy(other.gameObject);

@@ -35,6 +35,7 @@ public class SaveManager : MonoBehaviour
         Save save = new Save();
         save.coins = gameManager.coins;
         save.bestPoint = gameManager.bestPoint;
+        save.isSound = gameManager.isSound;
         bf.Serialize(fs, save);
         fs.Close();
     }
@@ -54,6 +55,7 @@ public class SaveManager : MonoBehaviour
 
         gameManager.coins = save.coins;
         gameManager.bestPoint = save.bestPoint;
+        gameManager.isSound = save.isSound;
 
         fs.Close();
 
@@ -67,5 +69,6 @@ public class Save
 {
     public int coins;
     public int bestPoint;
+    public bool isSound;
 
 }
