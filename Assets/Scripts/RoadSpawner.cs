@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 public class RoadSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] roadBlockPrefabs;
-
+    private GameObject block;
     [SerializeField] private Transform playerTransf;
     List<GameObject> currentsBlocks = new List<GameObject>();
 
@@ -32,16 +32,25 @@ public class RoadSpawner : MonoBehaviour
 
         for (int i = 0; i < blockCount; i++)
         {
-            SpawnBlock();
+            if (i<3)
+            {
+                SpawnBlock(true);
+            }
+           else SpawnBlock(false);
         }
     }
 
-    private void SpawnBlock()
+    private void SpawnBlock(bool first)
     {
-        GameObject block = Instantiate(roadBlockPrefabs[Random.Range(0, roadBlockPrefabs.Length)], transform);
+        if (first)
+        {
+            block = Instantiate(roadBlockPrefabs[0], transform);
+        }
+        else
+         block = Instantiate(roadBlockPrefabs[Random.Range(0, roadBlockPrefabs.Length)], transform);
         Vector3 blockPos;
 
-        if (currentsBlocks.Count>0)
+        if (currentsBlocks.Count > 0)
         {
             blockPos = currentsBlocks[currentsBlocks.Count - 1].transform.position + new Vector3(blokLength, 0, 0);
         }
@@ -57,7 +66,7 @@ public class RoadSpawner : MonoBehaviour
     {
         if (currentsBlocks[0].transform.position.x - playerTransf.position.x < -25)
         {
-            SpawnBlock();
+            SpawnBlock(false);
             DestroyBlock();
         }
     }

@@ -10,16 +10,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RoadSpawner roadSpawner;
     [SerializeField] public float moveSpead;
     [SerializeField] private Text pointText;
+    [SerializeField] private Text countCometText;
     [SerializeField] private Text bestPointText;
-    [SerializeField] private Text coinsText;
+    [SerializeField] private Text coinsText;  
+    [SerializeField] private Text timeText;
+    [SerializeField] private CountComet countComet;
     [SerializeField] private SmoothFollow camera;
     [SerializeField] private PauseController pauseController;
     [SerializeField] private MainMenu mainMenu;
-    private int point;
+
+    public int point;
     public int bestPoint;
     public int coins;
     private bool boostEnable;
     public bool isSound ;
+    public float timeInPlay;
 
     public bool canPlay;
     public void ShowResult()
@@ -33,6 +38,7 @@ public class GameManager : MonoBehaviour
         resultObj.SetActive(true);
         moveSpead = 14;
         StopAllCoroutines();
+        timeText.text = ("Time in Play: " + TimeFormat.Format(timeInPlay));
         SaveManager.Instance.SaveGame();
     }
     public void MainBtn()
@@ -42,6 +48,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         AllStartCoroutine();
+        StartCoroutine(TimePlay());
     }
     public void StartGame()
     {
@@ -50,6 +57,7 @@ public class GameManager : MonoBehaviour
         resultObj.SetActive(false);
         roadSpawner.StartGame();
         canPlay = true;
+        StartCoroutine(TimePlay());
         AllStartCoroutine();
         point = 0;
     }
@@ -72,7 +80,21 @@ public class GameManager : MonoBehaviour
             {
                 point++;
             }
+            
             pointText.text = ("Score:" + point.ToString());
+        }
+    } 
+    public string AddPointToComet(int point)
+    {
+        this.point += point;
+        return "Score:" + point.ToString();
+    } 
+    IEnumerator TimePlay()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1);
+            timeInPlay++;
         }
     }
     IEnumerator Spead()
@@ -87,19 +109,21 @@ public class GameManager : MonoBehaviour
 
     internal void RefreshText()
     {
-        coinsText.text = ("Score:" + coins.ToString());
-        bestPointText.text = ("Best score:" + bestPoint.ToString());
+        coinsText.text = ("Score: " + coins.ToString());
+        bestPointText.text = ("Best score: " + bestPoint.ToString());
+        countCometText.text = ("Count Comet: " + countComet.countComet.ToString());
     }
 
     private void Update()
     {
-        if (canPlay)
-        {
-            CheckInput();
-            if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Q))
             {
                 pauseController.Pause();
             }
+        if (canPlay)
+        {
+            CheckInput();
+            
         }
     }
     public void AllStartCoroutine()

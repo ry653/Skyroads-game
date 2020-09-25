@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource BGAS, EffectAS;
     public AudioClip CoinSnd;
+    [SerializeField] private AudioMixer Mixer;
 
     private void Awake()
     {
@@ -22,14 +24,15 @@ public class AudioManager : MonoBehaviour
 
         if (gameManager.isSound)
         {
-            BGAS.UnPause();
-            Debug.Log("on");
+            Mixer.SetFloat("MyExposedParam", 0);
+        }
+        else
+        {
+            Mixer.SetFloat("MyExposedParam", -80);
         }
 
-        else
-            BGAS.Pause();
-
     }
+
 
     public void PlayCoinEffect()
     {

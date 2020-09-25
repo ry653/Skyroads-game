@@ -33,12 +33,12 @@ public class MainMenu : MonoBehaviour
     }
     private void Awake()
     {
-        AudioManager.Instance.RefreshSoundState();
+       
     }
     private void Start()
     {
         SaveManager.Instance.LoadGame();
         soundBtnImg.sprite = gameManager.isSound ? musicOn : musicOf;
-        
+        AudioManager.Instance.RefreshSoundState();
     }
 }

@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     Rigidbody rb;
 
+
     private int laneNumber = 1,
                 lanesCount = 2;
 
@@ -47,15 +48,21 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
                 laneNumber = 0;
+                transform.rotation = Quaternion.Euler(0, 90, 20);
 
             }
             else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             {
                 laneNumber = 2;
+                transform.rotation = Quaternion.Euler(0, 90, -20);
 
             }
             else
-                laneNumber = 1;
+            {
+            laneNumber = 1;
+            transform.rotation = Quaternion.Euler(0, 90, 0);
+            }
+
         }
     }
     public void Pause()
@@ -72,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(Death());
         }
-    }
+    } 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("coins"))
@@ -87,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator Death()
     {
         gameManager.canPlay = false;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.3f);
         gameManager.ShowResult();
 
     }
